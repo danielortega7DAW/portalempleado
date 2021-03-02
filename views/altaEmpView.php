@@ -1,16 +1,13 @@
 <?php
+require_once("../controllers/altaEmpController.php");
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
-		aquivanlascosasdehacer();
+		empAlta();
 	}
-
 session_start();
-
 if (isset($_SESSION["admin"])) {
-	
 ?>
 <h1>Alta Empleado</h1>
-
-<form method="post" action="altaEmpIndex.php">
+<form method="post" action="altaEmpView.php">
 	<label for="emp_no">Numero de empleado </label>
 	<input type="text" name="emp_no" required/><br><br>
 	
@@ -27,10 +24,10 @@ if (isset($_SESSION["admin"])) {
 	<select name="gender">
 		<option>F</option>
 		<option>M</option>
-    </select>
+    </select><br><br>
 	
 	<label for="hire_date">Fecha de contratacion </label>
-	<input type="text" name="hire_date" required/><br><br>
+	<input type="date" name="hire_date" required/><br><br>
 	
 	<?php
 		$departamentos = obtainDept();
@@ -48,12 +45,12 @@ if (isset($_SESSION["admin"])) {
 	<input type="text" name="salary" required/><br><br>
 	
 	<label for="title">Cargo </label>
-	<input type="text" name="cargo" required/><br><br>
+	<input type="text" name="title" required/><br><br>
 		
 	<input type="submit" value="Enviar"/>
 </form>
 
-<a href="views/inicioView.php">Volver a inicio</a>
+<a href="inicioView.php">Volver a inicio</a>
 <?php }else{
 	header("location:loginIndex.php"); 
 }
