@@ -1,12 +1,7 @@
 <?php
 
 function user(){ 
-/*
-Funcion user()
 
-Crea la sesion para el registro, llama a comrpobarLogin() y
-reenvia la página a inicio_view
-*/
 	
 	session_start();
 	
@@ -25,7 +20,7 @@ reenvia la página a inicio_view
 		$pass = $_POST["passcode"];
 		
 		$consulta = comprobarLogin($user, $pass);
-		$consultaAdmin = comprobarAdmin($user);
+		$consultaAdmin = comprobarAdmin($user, $consulta);
 		
 		if($consultaAdmin != null){
 			$_SESSION["admin"] = $consultaAdmin["emp_no"];
@@ -36,23 +31,11 @@ reenvia la página a inicio_view
 			$_SESSION["usuario"] = $consulta["emp_no"];
 			header("location: views/inicioView.php");
 		}	
-		
-		
 	}
-	
 }
 
 function comprobarLogin($user, $pass) {
-	
-/*
-Funcion comprobarLogin($user, $pass)
-Parametros: usuario y contraseña
 
-Realiza un select para comprobar si el usuario (Email)
-coincide con la contraseña (LastName)
-
-Retorna $datos[i]
-*/
 		global $conexion;
 	try {
 		$consulta = $conexion->prepare("SELECT emp_no, last_name FROM employees WHERE emp_no = :username");
@@ -79,7 +62,7 @@ Retorna $datos[i]
 	}
 }
 
-function comprobarAdmin($user) {
+function comprobarAdmin($user, $consulta) {
 	global $conexion;
 	try {
 		$rrhh = "d003";
@@ -90,7 +73,7 @@ function comprobarAdmin($user) {
 			
 		if($datosAdmin!==null){
 			for ($i=0; $i<count($datosAdmin); $i++){
-				if($datosAdmin[$i]["dept_no"]==$rrhh){
+				if($datosAdmin[$i]["dept_no"]==$rrhh&&$consulta["emp_no"]==$datosAdmin[$i]["emp_no"]){
 					return $datosAdmin[$i];
 				}
 			}
